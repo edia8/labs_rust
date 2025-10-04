@@ -22,7 +22,7 @@ fn is_prime(x: u8) -> bool {
         return false;
     }
     let mut i: u8 = 3;
-    while i  <= x/i {
+    while i <= x / i {
         if x % i == 0 {
             return false;
         }
@@ -53,5 +53,4 @@ fn main() {
         println!("{} bottles of beer on the wall.\n\n", x);
     }
     println!("No bottle of beer on the wall\n")
-    
 }
