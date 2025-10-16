@@ -64,13 +64,12 @@ fn result_checked_multiplication(x: u32, y: u32) -> Result<u32, Err> {
     Ok(x * y)
 }
 
-// fn use_functions(x:u32,y:u32) {
-//     let r = result_checked_adition(x, y);
-//     match r {
-//         Ok(value) => println!("{}",value),
-//         Err(e) => println!("Eroare: {:?}",e)
-//     }
-// }
+fn use_function_add(x: u32, y: u32) -> Result<u32, Err> {
+    Ok(result_checked_adition(x, y))?
+}
+fn use_function_multiply(x: u32, y: u32) -> Result<u32, Err> {
+    Ok(result_checked_multiplication(x, y))?
+}
 
 //4
 
@@ -152,8 +151,14 @@ fn main() {
     let a: u32 = 4000000000;
     let b: u32 = 4000000000;
     println!("P3: ");
-    println!("{a} + {b} = {:?}", result_checked_adition(a, b));
-    println!("{a} * {b} = {:?}", result_checked_multiplication(a, b));
+    match use_function_add(a, b) {
+        Ok(val) => println!("{val}"),
+        Err(e) => println!("{e:?}"),
+    }
+    match use_function_multiply(a, b) {
+        Ok(val) => println!("{val}"),
+        Err(e) => println!("{e:?}"),
+    }
     println!("P4: ");
     let s = String::from("Ab 12🦀");
 
