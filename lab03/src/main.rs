@@ -284,6 +284,14 @@ fn main() {
         Ok(()) => println!("Cnp corect"),
         Err(e) => print_err_cnp(e),
     }
+    match valideaza_cnp("2010819209915") {
+        Ok(()) => println!("Cnp corect"),
+        Err(e) => print_err_cnp(e),
+    }
+    match valideaza_cnp("🦀") {
+        Ok(()) => println!("Cnp corect"),
+        Err(e) => print_err_cnp(e),
+    }
 
     println!("P2:");
     let x = 13;
