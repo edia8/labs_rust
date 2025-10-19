@@ -140,6 +140,88 @@ fn print_error(e: Erori) {
         Erori::NotPrintable(x) => println!("{x} nu poate fi printat"),
     }
 }
+
+enum CnpError {
+    LungimeGresita,
+    NuENr,
+    PrimaCifra,
+    Luna,
+    Zi,
+    CifraControlIncorecta,
+}
+
+fn print_err_cnp(e: CnpError) {
+    match e {
+        CnpError::LungimeGresita => println!("Lungimea este incorecta pt un cnp"),
+        CnpError::NuENr => println!("CNP-ul nu contine numai cifre"),
+        CnpError::PrimaCifra => println!("Prima cifra nu este valida"),
+        CnpError::Luna => println!("Conflict cu calendarul Jordanian"),
+        CnpError::Zi => println!("Conflict la zi cu calendarul Jordanian"),
+        CnpError::CifraControlIncorecta => println!("CNP invalid, cifra de control nu e buna"),
+    }
+}
+
+fn valideaza_cnp(cnp: &str) -> Result<(), CnpError> {
+    if cnp.len() != 13 {
+        return Err(CnpError::LungimeGresita);
+    }
+
+    for c in cnp.chars() {
+        if !c.is_ascii_digit() {
+            return Err(CnpError::CifraControlIncorecta);
+        }
+    }
+    
+    match cnp.chars().next() {
+        Some('1'..='8') => (),
+        _ => return Err(CnpError::PrimaCifra),
+    }
+
+    let luna: u8 = match cnp[3..5].parse() {
+        Ok(val) => val,
+        Err(_) => return Err(CnpError::Luna),
+    };
+    let ziua: u8 = match cnp[5..7].parse() {
+        Ok(val) => val,
+        Err(_) => return Err(CnpError::Zi),
+    };
+
+    if !(1..=12).contains(&luna) {
+        return Err(CnpError::Luna);
+    }
+    if !(1..=31).contains(&ziua) {
+        return Err(CnpError::Zi);
+    }
+
+    let constanta_control = "279146358279".to_string();
+    let mut suma_control: u32 = 0;
+
+    for (c_cnp, c_const) in cnp.chars().zip(constanta_control.chars()) {
+        let cifra_cnp = match c_cnp.to_digit(10) {
+            Some(c) => c,
+            None => return Err(CnpError::NuENr),
+        };
+        let cifra_const = match c_const.to_digit(10) {
+            Some(c) => c,
+            None => return Err(CnpError::NuENr),
+        };
+        suma_control += cifra_cnp * cifra_const;
+    }
+
+    let rest = suma_control % 11;
+    let cifra_control_calculata = if rest < 10 { rest } else { 1 };
+
+    if let Some(cifra_control_din_cnp) = cnp.chars().last().and_then(|c| c.to_digit(10)) {
+        if cifra_control_calculata != cifra_control_din_cnp {
+            return Err(CnpError::CifraControlIncorecta);
+        }
+    } else {
+        return Err(CnpError::LungimeGresita);
+    }
+
+    Ok(())
+}
+
 fn main() {
     println!("P1:");
     let mut x = 65371u16;
@@ -197,6 +279,12 @@ fn main() {
             Err(e) => print_error(e),
         }
     }
+    println!("P5: ");
+    match valideaza_cnp("6050620170043") {
+        Ok(()) => println!("Cnp corect"),
+        Err(e) => print_err_cnp(e),
+    }
+
     println!("P2:");
     let x = 13;
     let y = 91;
