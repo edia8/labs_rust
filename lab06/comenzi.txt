@@ -1,0 +1,39 @@
+echo Nu am implementat erori pentru argumente in plus, daca argumentele necesare sunt specificate, asemenea comenzilor din linux
+
+echo 
+ping
+ping abc
+
+count
+count a b c
+count a
+count a             b
+   count a             b   
+
+      echo
+   date agag
+times
+time
+TIMES
+echo In Rust we trust
+times
+
+bk add foxes https://www.reddit.com/r/foxes/
+bk add rust_book https://doc.rust-lang.org/book/
+bk add foxes_pics https://www.boredpanda.com/beautiful-fox-pictures/
+
+echo yass
+times abc
+echo
+eh 12:06
+Bko
+
+bk add iulia https://bestwebsite.tk
+bk add azalia https://fiwiwijaf.gf
+bk add foxes https://www.reddit.com/r/foxes/
+bk add rust_book https://doc.rust-lang.org/book/
+bk add foxes_pics https://www.boredpanda.com/beautiful-fox-pictures/
+bk add 
+bk search lia
+stop
+times
