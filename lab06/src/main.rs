@@ -9,7 +9,7 @@ struct DBEntry {
 }
 trait Commands {
     fn getname(&self) -> String;
-    fn exec(&mut self, args: &str);
+    fn exec(&mut self, args: &[&str]);
 }
 
 struct Terminal {
@@ -30,7 +30,8 @@ impl Commands for PingCommand {
     fn getname(&self) -> String {
         "ping".to_string()
     }
-    fn exec(&mut self, _args: &str) {
+    fn exec(&mut self, _args: &[&str]) {
+
         println!("pong!");
     }
 }
@@ -38,11 +39,10 @@ impl Commands for CountCommand {
     fn getname(&self) -> String {
         "count".to_string()
     }
-    fn exec(&mut self, args: &str) {
+    fn exec(&mut self, args: &[&str]) {
         if !args.is_empty() {
             //println!("{args}");
-            let x = args.split_whitespace().count();
-            println!("counted {x} args");
+            println!("counted {} args",args.len());
         } else {
             println!("Eroare pentru functia count, parametri insuficienti");
         }
@@ -52,7 +52,8 @@ impl Commands for TimesCommand {
     fn getname(&self) -> String {
         "times".to_string()
     }
-    fn exec(&mut self, _args: &str) {
+    fn exec(&mut self, _args: &[&str]) {
+
         self.count += 1;
         println!("{}", self.count);
     }
@@ -61,8 +62,8 @@ impl Commands for EchoCommand {
     fn getname(&self) -> String {
         "echo".to_string()
     }
-    fn exec(&mut self, args: &str) {
-        println!("{args}")
+    fn exec(&mut self, args: &[&str]) {
+        println!("{}",args.join(" "))
     }
 }
 impl Commands for DateCommand {
@@ -70,7 +71,8 @@ impl Commands for DateCommand {
         "date".to_string()
     }
 
-    fn exec(&mut self, _args: &str) {
+    fn exec(&mut self, _args: &[&str]) {
+
         let timp = Local::now();
         println!("{}", timp.format("%Y-%m-%d %H:%M:%S"));
     }
@@ -79,8 +81,7 @@ impl Commands for BkCommand {
     fn getname(&self) -> String {
         "bk".to_string()
     }
-    fn exec(&mut self, args: &str) {
-        let args: Vec<&str> = args.split_whitespace().collect();
+    fn exec(&mut self, args: &[&str]) {
         let create = r"
 create table if not exists links (
     name text    not null,
@@ -183,15 +184,17 @@ impl Terminal {
                     if linii.is_empty() {
                         continue;
                     }
-                    let exec: Vec<&str> = linii.split_whitespace().collect();
+                    let mut exec: Vec<&str> = linii.split_whitespace().collect();
                     let command_name = exec[0];
+                    exec.remove(0);
+                    let exec = exec;
                     let mut found = false;
                     for comanda in &mut self.commands {
                         if command_name == "stop" {
                             break 's;
                         }
                         if comanda.getname() == command_name {
-                            comanda.exec(exec[1..].join(" ").as_str());
+                            comanda.exec(&exec);
                             found = true;
                             break;
                         }
