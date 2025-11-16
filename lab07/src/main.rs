@@ -173,5 +173,16 @@ fn main() {
     let j = -i + i;
     assert_eq_rel!(j.real, 0);
     assert_eq_rel!(j.imag, 0);
+    //BONUS
+    let mut k = Complex::default();
+    k+=h;
+    assert_eq_rel!(k.real,-4);
+    assert_eq_rel!(k.imag,-5);
+    k*=a;
+    assert_eq_rel!(k.real,6);
+    assert_eq_rel!(k.imag,-13);
+    k-=k;
+    assert_eq_rel!(k.real,0);
+    assert_eq_rel!(k.imag,0);
     println!("ok!");
 }
