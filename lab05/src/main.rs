@@ -13,9 +13,14 @@ fn read_from_file(path: &str) -> Result<Vec<Student>, std::io::Error> {
     let file = File::open(path)?; //.expect("Failed to open file");
     let citit = io::BufReader::new(file);
     let mut students = Vec::new();
+    let mut ind=0;
     for line in citit.lines() {
         let line = line?;
-        let obj: Vec<&str> = line.split(',').collect();
+        let obj:Vec<&str> = line.split(',').collect();
+        if obj.len() != 3 {
+            println!("Obiectul al {ind}-lea din {path} nu este de tip student. Sarim peste el");
+            continue;
+        }
         let name = obj[0].to_string();
         let phone_number = obj[1].to_string();
         let age = obj[2].parse().unwrap_or(0);
@@ -24,6 +29,7 @@ fn read_from_file(path: &str) -> Result<Vec<Student>, std::io::Error> {
             phone_number,
             age,
         });
+        ind+=1;
     }
     Ok(students)
 }
@@ -230,10 +236,10 @@ fn old_young_student(s: &[Student]) -> (Student, Student) {
 }
 
 fn main() -> Result<(), std::io::Error> {
-    let path = "inputp1.txt";
+    let path = "input1.txt";
     let s: Vec<Student> = read_from_file(path)?;
     let (olds, youngs) = old_young_student(&s);
-    println!("P1\nBatran: {olds:#?}\n Tanar: {youngs:#?}");
+    println!("P1\nBatran: {olds:?}\n Tanar: {youngs:?}");
 
     println!("\nP2:");
     let mut canvas = new_canvas();
@@ -244,6 +250,6 @@ fn main() -> Result<(), std::io::Error> {
     let path = "input.jsonl";
     let st = read_from_json(path)?;
     let (oldst, youngst) = old_young_student(&st);
-    println!("Batran: {oldst:#?}\n Tanar: {youngst:#?}");
+    println!("Batran: {oldst:?}\n Tanar: {youngst:?}");
     Ok(())
 }

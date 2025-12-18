@@ -98,15 +98,16 @@ fn p4() {
     }
     for str in hosts.lines() {
         if !str.starts_with('#')
-            && let Some((str1, mut str2)) = str.split_once([' ', '\t']) {
-                str2 = str2.trim();
-                if let Some((str3, _str4)) = str2.split_once(' ') {
-                    str2 = str3
-                }
-                println!("{str2} => {str1}");
+            && let Some((str1, mut str2)) = str.split_once([' ', '\t'])
+        {
+            str2 = str2.trim();
+            if let Some((str3, _str4)) = str2.split_once(' ') {
+                str2 = str3
             }
+            println!("{str2} => {str1}");
         }
     }
+}
 // fn bonus() {
 //     //p2("bonus.txt");
 //     //time: 149.231818188s
